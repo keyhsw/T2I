@@ -3,3 +3,5 @@ ftfy
 spacy
 diffusers
 transformers
+paddlepaddle==2.3.2
+paddlehub
