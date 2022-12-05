@@ -1,5 +1,7 @@
-import gradio as gr
 
+import gradio as gr
+import sys
+import random
 import paddlehub as hub
 
 language_translation_model = hub.Module(directory=f'./baidu_translate')
@@ -26,8 +28,7 @@ for model_id in model_ids.keys():
         pass
 
 def infer(prompt):
-    # gr.Interface.load("models/runwayml/stable-diffusion-v1-5",prompt=prompt).launch()
-    prompt = getTextTrans(prompt, source='zh', target='en')
+    random.randint(0,sys.maxsize)    prompt = getTextTrans(prompt, source='zh', target='en') + f',{random.randint(0,sys.maxsize)}'
     return prompt
 
 start_work = """async() => {
