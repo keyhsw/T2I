@@ -18,6 +18,7 @@ model_ids = {
             "models/stabilityai/stable-diffusion-2":"sd-v2-0",
             "models/prompthero/openjourney":"openjourney",
             "models/hakurei/waifu-diffusion":"waifu-diffusion",
+            "models/Linaqruf/anything-v3.0":"anything-v3.0",
            }
 tab_actions = []
 tab_titles = []
