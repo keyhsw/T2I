@@ -1,5 +1,15 @@
 import gradio as gr
 
+import paddlehub as hub
+
+language_translation_model = hub.Module(directory=f'./baidu_translate')
+def getTextTrans(text, source='zh', target='en'):
+    try:
+        text_translation = language_translation_model.translate(text, source, target)
+        return text_translation
+    except Exception as e:
+        return text 
+
 model_ids = {"models/runwayml/stable-diffusion-v1-5":"stable-diffusion-v1-5",
            "models/stabilityai/stable-diffusion-2":"stable-diffusion-2",
            "models/prompthero/openjourney":"openjourney",
@@ -17,6 +27,7 @@ for model_id in model_ids.keys():
 
 def infer(prompt):
     # gr.Interface.load("models/runwayml/stable-diffusion-v1-5",prompt=prompt).launch()
+    prompt = getTextTrans(prompt, source='zh', target='en')
     return prompt
 
 start_work = """async() => {
@@ -150,7 +161,7 @@ with gr.Blocks(title='Text to Image') as demo:
     with gr.Group(elem_id="page_2", visible=False) as page_2:                 
             with gr.Row(elem_id="prompt_row"):
                 prompt_input0 = gr.Textbox(lines=4, label="prompt")
-                prompt_input1 = gr.Textbox(lines=4, label="prompt", visible=False)
+                prompt_input1 = gr.Textbox(lines=4, label="prompt", visible=True)
             with gr.Row():
                 submit_btn = gr.Button(value = "submit",elem_id="erase-btn").style(
                         margin=True,
