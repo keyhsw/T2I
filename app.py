@@ -12,6 +12,7 @@ def getTextTrans(text, source='zh', target='en'):
     except Exception as e:
         return text 
 
+
 model_ids = {
             "models/CompVis/stable-diffusion-v1-4":"sd-v1-4",
             "models/runwayml/stable-diffusion-v1-5":"sd-v1-5",
