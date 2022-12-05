@@ -1,0 +1,5 @@
+torch
+ftfy
+spacy
+diffusers
+transformers
