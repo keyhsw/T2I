@@ -103,17 +103,14 @@ start_work = """async() => {
                             }                        
                             setTimeout(function() {
                                 text1 = window['gradioEl'].querySelectorAll('textarea')[1];    
-                                //console.log('do_click()_1_' + text1.value);
                                 
                                 btns = window['gradioEl'].querySelectorAll('button');
                                 for (var i = 0; i < btns.length; i++) {
                                     if (btns[i].innerText == 'Submit') {
                                         btns[i].focus();
                                         btns[i].click();                
-                                       //break;
                                     }
                                 }
-                                //console.log('do_click()_3_');
                                 window['doCheckPrompt'] = 0;
                             }, 10);                   
                     }
@@ -136,7 +133,7 @@ with gr.Blocks(title='Text to Image') as demo:
     with gr.Group(elem_id="page_2", visible=False) as page_2:                 
             with gr.Row(elem_id="prompt_row"):
                 prompt_input0 = gr.Textbox(lines=4, label="prompt")
-                prompt_input1 = gr.Textbox(lines=4, label="prompt", visible=True)
+                prompt_input1 = gr.Textbox(lines=4, label="prompt", visible=False)
             with gr.Row():
                 submit_btn = gr.Button(value = "submit",elem_id="erase-btn").style(
                         margin=True,
