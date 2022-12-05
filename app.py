@@ -12,9 +12,12 @@ def getTextTrans(text, source='zh', target='en'):
     except Exception as e:
         return text 
 
-model_ids = {"models/runwayml/stable-diffusion-v1-5":"stable-diffusion-v1-5",
-           "models/stabilityai/stable-diffusion-2":"stable-diffusion-2",
-           "models/prompthero/openjourney":"openjourney",
+model_ids = {
+            "models/CompVis/stable-diffusion-v1-4":"sd-v1-4",
+            "models/runwayml/stable-diffusion-v1-5":"sd-v1-5",
+            "models/stabilityai/stable-diffusion-2":"sd-v2-0",
+            "models/prompthero/openjourney":"openjourney",
+            "models/hakurei/waifu-diffusion":"waifu-diffusion",
            }
 tab_actions = []
 tab_titles = []
