@@ -139,7 +139,7 @@ with gr.Blocks(title='Text to Image') as demo:
     with gr.Group(elem_id="page_2", visible=False) as page_2:                 
             with gr.Row(elem_id="prompt_row"):
                 prompt_input0 = gr.Textbox(lines=4, label="prompt")
-                prompt_input1 = gr.Textbox(lines=4, label="prompt", visible=True)
+                prompt_input1 = gr.Textbox(lines=4, label="prompt", visible=False)
             with gr.Row():
                 submit_btn = gr.Button(value = "submit",elem_id="erase-btn").style(
                         margin=True,
