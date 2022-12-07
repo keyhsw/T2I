@@ -3,6 +3,7 @@ import gradio as gr
 import sys
 import random
 import paddlehub as hub
+from loguru import logger
 
 language_translation_model = hub.Module(directory=f'./baidu_translate')
 def getTextTrans(text, source='zh', target='en'):
@@ -34,6 +35,7 @@ for model_id in model_ids.keys():
         pass
 
 def infer(prompt):
+    logger.info(f"infer_1_")
     prompt = getTextTrans(prompt, source='zh', target='en') + f',{random.randint(0,sys.maxsize)}'
     return prompt
 
