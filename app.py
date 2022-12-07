@@ -32,7 +32,7 @@ for model_id in model_ids.keys():
         tab_actions.append(tab)
         tab_titles.append(model_ids[model_id])
     except:
-        pass
+        logger.info(f"load_fail__{model_id}_")
 
 def infer(prompt):
     logger.info(f"infer_1_")
