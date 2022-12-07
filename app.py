@@ -35,7 +35,7 @@ for model_id in model_ids.keys():
         logger.info(f"load_fail__{model_id}_")
 
 def infer(prompt):
-    logger.info(f"infer_1_")
+    logger.info(f"infer_1___")
     prompt = getTextTrans(prompt, source='zh', target='en') + f',{random.randint(0,sys.maxsize)}'
     return prompt
 
@@ -103,7 +103,7 @@ start_work = """async() => {
                     text0 = texts[0];    
                     text1 = texts[1];
                     if (window['doCheckPrompt'] === 0 && window['prevPrompt'] !== text1.value) {
-                            console.log('_____new prompt____');
+                            console.log('_____new prompt___[' + text1.value + ']_');
                             window['doCheckPrompt'] = 1;
                             window['prevPrompt'] = text1.value;
                             for (var i = 2; i < texts.length; i++) {
