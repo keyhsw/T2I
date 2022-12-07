@@ -35,7 +35,7 @@ for model_id in model_ids.keys():
         logger.info(f"load_fail__{model_id}_")
 
 def infer(prompt):
-    logger.info(f"infer_1___[{prompt}]")
+    logger.info(f"infer_1__")
     prompt = getTextTrans(prompt, source='zh', target='en') + f',{random.randint(0,sys.maxsize)}'
     return prompt
 
