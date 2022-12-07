@@ -102,7 +102,8 @@ start_work = """async() => {
                     texts = window['gradioEl'].querySelectorAll('textarea');
                     text0 = texts[0];    
                     text1 = texts[1];
-                    if (window['doCheckPrompt'] == 0 && window['prevPrompt'] !== text1.value) {
+                    if (window['doCheckPrompt'] === 0 && window['prevPrompt'] !== text1.value) {
+                            console.log('_____new prompt____');
                             window['doCheckPrompt'] = 1;
                             window['prevPrompt'] = text1.value;
                             for (var i = 2; i < texts.length; i++) {
@@ -110,12 +111,9 @@ start_work = """async() => {
                                 texts[i].dispatchEvent(new Event('input', { bubbles: true }));
                             }                        
                             setTimeout(function() {
-                                //text1 = window['gradioEl'].querySelectorAll('textarea')[1];   
-                                
                                 btns = window['gradioEl'].querySelectorAll('button');
                                 for (var i = 0; i < btns.length; i++) {
                                     if (btns[i].innerText == 'Submit') {
-                                        //btns[i].focus();
                                         btns[i].click();                
                                     }
                                 }
