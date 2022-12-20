@@ -18,7 +18,7 @@ model_ids = {
             "models/stabilityai/stable-diffusion-2-1":"sd-v2-1",
             "models/stabilityai/stable-diffusion-2":"sd-v2-0",
             "models/runwayml/stable-diffusion-v1-5":"sd-v1-5",
-            "models/CompVis/stable-diffusion-v1-4":"sd-v1-4",
+            # "models/CompVis/stable-diffusion-v1-4":"sd-v1-4",
             "models/prompthero/openjourney":"openjourney",
             "models/hakurei/waifu-diffusion":"waifu-diffusion",
             "models/Linaqruf/anything-v3.0":"anything-v3.0",
