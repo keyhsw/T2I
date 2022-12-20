@@ -21,7 +21,7 @@ model_ids = {
             "models/CompVis/stable-diffusion-v1-4":"sd-v1-4",
             "models/prompthero/openjourney":"openjourney",
             # "models/ShadoWxShinigamI/Midjourney-Rangoli":"midjourney",
-            "models/hakurei/waifu-diffusion":"waifu-diffusion",
+            "models/hakurei/waifu-diffusion-v1-4":"waifu-v1-4",
             "models/Linaqruf/anything-v3.0":"anything-v3.0",
            }
 tab_actions = []
