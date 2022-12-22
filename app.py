@@ -102,7 +102,8 @@ start_work = """async() => {
                     texts = window['gradioEl'].querySelectorAll('textarea');
                     text0 = texts[0];    
                     text1 = texts[1];
-                    if (window['doCheckPrompt'] === 0 && window['prevPrompt'] !== text1.value) {
+                    progress_bar = window['gradioEl'].querySelectorAll('.progress-bar');
+                    if (window['doCheckPrompt'] === 0 && window['prevPrompt'] !== text1.value && progress_bar.length == 0) {
                             console.log('_____new prompt___[' + text1.value + ']_');
                             window['doCheckPrompt'] = 1;
                             window['prevPrompt'] = text1.value;
