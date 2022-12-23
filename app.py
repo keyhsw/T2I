@@ -12,7 +12,7 @@ def getTextTrans(text, source='zh', target='en'):
     except Exception as e:
         return text 
         
-extend_prompt_pipe = pipeline('text-generation', model='./model', max_length=77)
+extend_prompt_pipe = pipeline('text-generation', model='yizhangliu/prompt-extend', max_length=77)
 
 def extend_prompt(prompt):
     prompt_en = getTextTrans(prompt, source='zh', target='en')
