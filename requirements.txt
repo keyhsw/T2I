@@ -1,8 +1,8 @@
-torch
 ftfy
 spacy
-diffusers
-transformers
+transformers 
+torch
+gradio
 paddlepaddle==2.3.2
 paddlehub
 loguru
