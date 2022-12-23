@@ -18,13 +18,21 @@ def extend_prompt(prompt):
     prompt_en = getTextTrans(prompt, source='zh', target='en')
     extend_prompt_en = extend_prompt_pipe(prompt_en+',', num_return_sequences=1)[0]["generated_text"]    
     if (prompt != prompt_en):
+        logger.info(f"extend_prompt__1__")
         extend_prompt_zh = getTextTrans(extend_prompt_en, source='en', target='zh')
         extend_prompt_out = f'{extend_prompt_zh} 【{extend_prompt_en}】'
     else:
+        logger.info(f"extend_prompt__2__")
         extend_prompt_out = extend_prompt_en
 
     return prompt_en, extend_prompt_en, extend_prompt_out
 
+def change_prompt_radio(choice):
+    if choice == "Original prompt":
+        return gr.update(visible=False)
+    else:
+        return gr.update(visible=True)
+        
 examples = [
             ['elon musk as thor'],
             ["giant dragon flying in the sky"],
@@ -211,10 +219,12 @@ with gr.Blocks(title='prompt-extend/') as demo:
                         margin=True,
                         rounded=(True, True, True, True),
                     )
-                submit_btn.click(fn=extend_prompt, inputs=[prompt_input0], outputs=[prompt_input0_en, prompt_input1, prompt_input2])
             with gr.Row(elem_id='tab_demo', visible=True).style(height=200):
                 tab_demo = gr.TabbedInterface(tab_actions, tab_titles) 
             with gr.Row():
                 gr.HTML(f"<p>{thanks_info}</p>")
+
+    # prompt_radio.change(fn=change_prompt_radio, inputs=[prompt_radio], outputs=[prompt_input2])
+    submit_btn.click(fn=extend_prompt, inputs=[prompt_input0], outputs=[prompt_input0_en, prompt_input1, prompt_input2])
 
 demo.launch()
