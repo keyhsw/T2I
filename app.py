@@ -189,15 +189,7 @@ start_work = """async() => {
     return false;
 }"""
 
-descriptions = "Thanks: "
-descriptions += "[<a style='display:inline-block' href='https://huggingface.co/spaces/daspartho/prompt-extend' _blank><font style='color:blue;weight:bold;'>prompt-extend</font></a>]"
-descriptions += "[<a style='display:inline-block' href='https://huggingface.co/spaces/stabilityai/stable-diffusion-1' _blank><font style='color:blue;weight:bold;'>Stable Diffusion 1.0</font></a>]"
-descriptions += "[<a style='display:inline-block' href='https://huggingface.co/spaces/stabilityai/stable-diffusion-1' _blank><font style='color:blue;weight:bold;'>Stable Diffusion 1.0</font></a>]"
-descriptions += "[<a style='display:inline-block' href='https://huggingface.co/spaces/hakurei/waifu-diffusion-demo' _blank><font style='color:blue;weight:bold;'>waifu-diffusion-demo</font></a>]"
-descriptions = f"<p>{descriptions}</p>"
-
-with gr.Blocks(title='prompt-extend/') as demo:
-    # gr.HTML(descriptions)
+with gr.Blocks(title='Text-to-Image') as demo:
     with gr.Group(elem_id="page_1", visible=True) as page_1:
         with gr.Box():            
             with gr.Row():
