@@ -12,27 +12,8 @@ def getTextTrans(text, source='zh', target='en'):
     except Exception as e:
         return text 
         
-extend_prompt_pipe = pipeline('text-generation', model='yizhangliu/prompt-extend', max_length=77)
+extend_prompt_pipe = pipeline('text-generation', model='yizhangliu/prompt-extend', max_length=77, pad_token_id=0)
 
-def extend_prompt(prompt):
-    prompt_en = getTextTrans(prompt, source='zh', target='en')
-    extend_prompt_en = extend_prompt_pipe(prompt_en+',', num_return_sequences=1)[0]["generated_text"]    
-    if (prompt != prompt_en):
-        logger.info(f"extend_prompt__1__")
-        extend_prompt_zh = getTextTrans(extend_prompt_en, source='en', target='zh')
-        extend_prompt_out = f'{extend_prompt_zh} 【{extend_prompt_en}】'
-    else:
-        logger.info(f"extend_prompt__2__")
-        extend_prompt_out = extend_prompt_en
-
-    return prompt_en, extend_prompt_en, extend_prompt_out
-
-def change_prompt_radio(choice):
-    if choice == "Original prompt":
-        return gr.update(visible=False)
-    else:
-        return gr.update(visible=True)
-        
 examples = [
             ['elon musk as thor'],
             ["giant dragon flying in the sky"],
@@ -125,10 +106,8 @@ start_work = """async() => {
                 tabitems[i].childNodes[0].children[0].style.display='none';
                 tabitems[i].childNodes[0].children[1].style.display='none';
                 tabitems[i].childNodes[0].children[2].children[0].style.display='none';
-                tabitems[i].childNodes[0].children[3].style.display='none';
-                
-            }
-            
+                tabitems[i].childNodes[0].children[3].style.display='none';                
+            }            
         }  
         
         tab_demo = window['gradioEl'].querySelectorAll('#tab_demo')[0];
@@ -136,24 +115,15 @@ start_work = """async() => {
         tab_demo.setAttribute('style', 'height: 100%;');
         const page1 = window['gradioEl'].querySelectorAll('#page_1')[0];
         const page2 = window['gradioEl'].querySelectorAll('#page_2')[0];
-        window['gradioEl'].querySelectorAll('.gr-radio')[0].disabled = "";
-        window['gradioEl'].querySelectorAll('.gr-radio')[1].disabled = "";
-    
+        window['gradioEl'].querySelector('#input_col1_row2').children[0].setAttribute('style', 'min-width:0px;width:50%;');
+        window['gradioEl'].querySelector('#input_col1_row2').children[1].setAttribute('style', 'min-width:0px;width:50%;');
         page1.style.display = "none";
         page2.style.display = "block";    
         window['prevPrompt'] = '';
         window['doCheckPrompt'] = 0;
         window['checkPrompt'] = function checkPrompt() {
             try {
-                    texts = window['gradioEl'].querySelectorAll('textarea');
-                    text0 = texts[0];    
-                    text1 = texts[1];
-                    text2 = texts[2];
-                    if (window['gradioEl'].querySelectorAll('.gr-radio')[0].checked) {
-                        text_value = text1.value;
-                    } else {
-                        text_value = text2.value;
-                    }
+                    text_value = window['gradioEl'].querySelectorAll('#prompt_work')[0].querySelectorAll('textarea')[0].value
                     progress_bar = window['gradioEl'].querySelectorAll('.progress-bar');
                     if (window['doCheckPrompt'] === 0 && window['prevPrompt'] !== text_value && progress_bar.length == 0) {
                             console.log('_____new prompt___[' + text_value + ']_');
@@ -189,6 +159,26 @@ start_work = """async() => {
     return false;
 }"""
 
+def prompt_extend(prompt):
+    prompt_en = getTextTrans(prompt, source='zh', target='en')
+    extend_prompt_en = extend_prompt_pipe(prompt_en+',', num_return_sequences=1)[0]["generated_text"]    
+    if (prompt != prompt_en):
+        logger.info(f"extend_prompt__1__")
+        extend_prompt_out = getTextTrans(extend_prompt_en, source='en', target='zh')
+    else:
+        logger.info(f"extend_prompt__2__")
+        extend_prompt_out = extend_prompt_en
+
+    return extend_prompt_out
+
+def prompt_draw(prompt):
+    prompt_en = getTextTrans(prompt, source='zh', target='en')
+    if (prompt != prompt_en):
+        logger.info(f"draw_prompt______1__")
+    else:
+        logger.info(f"draw_prompt______2__")
+    return prompt_en
+        
 with gr.Blocks(title='Text-to-Image') as demo:
     with gr.Group(elem_id="page_1", visible=True) as page_1:
         with gr.Box():            
@@ -199,24 +189,25 @@ with gr.Blocks(title='Text-to-Image') as demo:
     with gr.Group(elem_id="page_2", visible=False) as page_2:
             with gr.Row(elem_id="prompt_row0"):
                 with gr.Column(id="input_col1"):
-                    prompt_input0 = gr.Textbox(lines=1, label="Original prompt", visible=True)
-                    prompt_input0_en = gr.Textbox(lines=1, label="Original prompt", visible=False)
-                    prompt_radio = gr.Radio(["Original prompt", "Extend prompt"], elem_id="prompt_radio",value="Extend prompt", show_label=False)
-            # with gr.Row(elem_id="prompt_row1"):
+                    with gr.Row(elem_id="input_col1_row1"):
+                        prompt_input0 = gr.Textbox(lines=2, label="Original prompt", visible=True)
+                    with gr.Row(elem_id="input_col1_row2"):
+                        with gr.Column(elem_id="input_col1_row2_col1"):
+                            draw_btn_0 = gr.Button(value = "Generate(original)", elem_id="draw-btn-0")
+                        with gr.Column(elem_id="input_col1_row2_col2"):
+                            extend_btn = gr.Button(value = "Extend prompt",elem_id="extend-btn")                    
                 with gr.Column(id="input_col2"):
-                    prompt_input1 = gr.Textbox(lines=2, label="Extend prompt", visible=False)
-                    prompt_input2 = gr.Textbox(lines=2, label="Extend prompt", visible=True)
-            with gr.Row():
-                submit_btn = gr.Button(value = "submit",elem_id="submit-btn").style(
-                        margin=True,
-                        rounded=(True, True, True, True),
-                    )
+                    prompt_input1 = gr.Textbox(lines=2, label="Extend prompt", visible=True)
+                    draw_btn_1 = gr.Button(value = "Generate(extend)", elem_id="draw-btn-1")
+                prompt_work = gr.Textbox(lines=1, label="prompt_work", elem_id="prompt_work", visible=False)
+                extend_btn.click(fn=prompt_extend, inputs=[prompt_input0], outputs=[prompt_input1])
+                draw_btn_0.click(fn=prompt_draw, inputs=[prompt_input0], outputs=[prompt_work])
+                draw_btn_1.click(fn=prompt_draw, inputs=[prompt_input1], outputs=[prompt_work])
             with gr.Row(elem_id='tab_demo', visible=True).style(height=200):
                 tab_demo = gr.TabbedInterface(tab_actions, tab_titles) 
             with gr.Row():
                 gr.HTML(f"<p>{thanks_info}</p>")
 
-    # prompt_radio.change(fn=change_prompt_radio, inputs=[prompt_radio], outputs=[prompt_input2])
-    submit_btn.click(fn=extend_prompt, inputs=[prompt_input0], outputs=[prompt_input0_en, prompt_input1, prompt_input2])
+    # submit_btn.click(fn=extend_prompt, inputs=[prompt_input0], outputs=[prompt_input0_en, prompt_input1, prompt_input2])
 
 demo.launch()
