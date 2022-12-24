@@ -6,6 +6,15 @@ from loguru import logger
 
 language_translation_model = hub.Module(directory=f'./baidu_translate')
 def getTextTrans(text, source='zh', target='en'):
+    def is_chinese(string):
+        for ch in string:
+            if u'\u4e00' <= ch <= u'\u9fff':
+                return True
+        return False
+        
+    if not is_chinese(text): 
+        return text
+        
     try:
         text_translation = language_translation_model.translate(text, source, target)
         return text_translation
@@ -159,7 +168,7 @@ start_work = """async() => {
     return false;
 }"""
 
-def prompt_extend(prompt):
+def prompt_extend(prompt):    
     prompt_en = getTextTrans(prompt, source='zh', target='en')
     extend_prompt_en = extend_prompt_pipe(prompt_en+',', num_return_sequences=1)[0]["generated_text"]    
     if (prompt != prompt_en):
