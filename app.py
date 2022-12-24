@@ -199,7 +199,7 @@ with gr.Blocks(title='Text-to-Image') as demo:
                 with gr.Column(id="input_col2"):
                     prompt_input1 = gr.Textbox(lines=2, label="Extend prompt", visible=True)
                     draw_btn_1 = gr.Button(value = "Generate(extend)", elem_id="draw-btn-1")
-                prompt_work = gr.Textbox(lines=1, label="prompt_work", elem_id="prompt_work", visible=False)
+                    prompt_work = gr.Textbox(lines=1, label="prompt_work", elem_id="prompt_work", visible=False)
                 extend_btn.click(fn=prompt_extend, inputs=[prompt_input0], outputs=[prompt_input1])
                 draw_btn_0.click(fn=prompt_draw, inputs=[prompt_input0], outputs=[prompt_work])
                 draw_btn_1.click(fn=prompt_draw, inputs=[prompt_input1], outputs=[prompt_work])
