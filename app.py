@@ -12,7 +12,7 @@ def getTextTrans(text, source='zh', target='en'):
                 return True
         return False
         
-    if not is_chinese(text): 
+    if not is_chinese(text) and target == 'en': 
         return text
         
     try:
@@ -132,7 +132,7 @@ start_work = """async() => {
         window['doCheckPrompt'] = 0;
         window['checkPrompt'] = function checkPrompt() {
             try {
-                    text_value = window['gradioEl'].querySelectorAll('#prompt_work')[0].querySelectorAll('textarea')[0].value
+                    text_value = window['gradioEl'].querySelectorAll('#prompt_work')[0].querySelectorAll('textarea')[0].value;
                     progress_bar = window['gradioEl'].querySelectorAll('.progress-bar');
                     if (window['doCheckPrompt'] === 0 && window['prevPrompt'] !== text_value && progress_bar.length == 0) {
                             console.log('_____new prompt___[' + text_value + ']_');
