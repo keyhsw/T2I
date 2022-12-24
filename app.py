@@ -23,28 +23,10 @@ def getTextTrans(text, source='zh', target='en'):
         
 extend_prompt_pipe = pipeline('text-generation', model='yizhangliu/prompt-extend', max_length=77, pad_token_id=0)
 
-examples = [
-            ['elon musk as thor'],
-            ["giant dragon flying in the sky"],
-            ['psychedelic liquids space'],
-            ["a coconut laying on the beach"],
-            ["peaceful village landscape"],
-            ]
-
-# model_ids = {
-#             # "models/stabilityai/stable-diffusion-2-1":"sd-v2-1",
-#             "models/stabilityai/stable-diffusion-2":"sd-v2-0",
-#             # "models/runwayml/stable-diffusion-v1-5":"sd-v1-5",
-#             # "models/CompVis/stable-diffusion-v1-4":"sd-v1-4",
-#             "models/prompthero/openjourney":"openjourney",
-#             "models/hakurei/waifu-diffusion":"waifu-diffusion",
-#             "models/Linaqruf/anything-v3.0":"anything-v3.0",
-#            }
-
 space_ids = {
             "spaces/stabilityai/stable-diffusion":"Stable Diffusion 2.1",
+            "spaces/runwayml/stable-diffusion-v1-5":"Stable Diffusion 1.5",
             "spaces/stabilityai/stable-diffusion-1":"Stable Diffusion 1.0",
-            # "spaces/hakurei/waifu-diffusion-demo":"waifu-diffusion",
             }
 
 tab_actions = []
@@ -104,14 +86,14 @@ start_work = """async() => {
         tabitems = window['gradioEl'].querySelectorAll('.tabitem');
         
         for (var i = 0; i < tabitems.length; i++) {    
-            if ([0, 1].includes(i)) {
+            if ([0, 1, 2].includes(i)) {
                 tabitems[i].childNodes[0].children[0].style.display='none';
                 for (var j = 0; j < tabitems[i].childNodes[0].children[1].children.length; j++) {
                     if (j != 1) {
                         tabitems[i].childNodes[0].children[1].children[j].style.display='none';
                     }
                 }
-            } else if (i==2) {
+            } else {
                 tabitems[i].childNodes[0].children[0].style.display='none';
                 tabitems[i].childNodes[0].children[1].style.display='none';
                 tabitems[i].childNodes[0].children[2].children[0].style.display='none';
@@ -140,9 +122,9 @@ start_work = """async() => {
                             window['prevPrompt'] = text_value;
                             tabitems = window['gradioEl'].querySelectorAll('.tabitem');
                             for (var i = 0; i < tabitems.length; i++) {   
-                                if ([0, 1].includes(i)) {
+                                if ([0, 1, 2].includes(i)) {
                                     inputText = tabitems[i].children[0].children[1].children[0].querySelectorAll('.gr-text-input')[0];
-                                } else if (i==2) {
+                                } else {
                                     inputText = tabitems[i].childNodes[0].children[2].children[0].children[0].querySelectorAll('.gr-text-input')[0];
                                 }
                                 setNativeValue(inputText, text_value);
@@ -209,14 +191,13 @@ with gr.Blocks(title='Text-to-Image') as demo:
                     prompt_input1 = gr.Textbox(lines=2, label="Extend prompt", visible=True)
                     draw_btn_1 = gr.Button(value = "Generate(extend)", elem_id="draw-btn-1")
                     prompt_work = gr.Textbox(lines=1, label="prompt_work", elem_id="prompt_work", visible=False)
-                extend_btn.click(fn=prompt_extend, inputs=[prompt_input0], outputs=[prompt_input1])
-                draw_btn_0.click(fn=prompt_draw, inputs=[prompt_input0], outputs=[prompt_work])
-                draw_btn_1.click(fn=prompt_draw, inputs=[prompt_input1], outputs=[prompt_work])
             with gr.Row(elem_id='tab_demo', visible=True).style(height=200):
                 tab_demo = gr.TabbedInterface(tab_actions, tab_titles) 
             with gr.Row():
                 gr.HTML(f"<p>{thanks_info}</p>")
 
-    # submit_btn.click(fn=extend_prompt, inputs=[prompt_input0], outputs=[prompt_input0_en, prompt_input1, prompt_input2])
-
+            extend_btn.click(fn=prompt_extend, inputs=[prompt_input0], outputs=[prompt_input1])
+            draw_btn_0.click(fn=prompt_draw, inputs=[prompt_input0], outputs=[prompt_work])
+            draw_btn_1.click(fn=prompt_draw, inputs=[prompt_input1], outputs=[prompt_work])
+        
 demo.launch()
