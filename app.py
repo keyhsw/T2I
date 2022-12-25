@@ -24,9 +24,9 @@ def getTextTrans(text, source='zh', target='en'):
 extend_prompt_pipe = pipeline('text-generation', model='yizhangliu/prompt-extend', max_length=77, pad_token_id=0)
 
 space_ids = {
-            "spaces/stabilityai/stable-diffusion":"Stable Diffusion 2.1",
-            "spaces/runwayml/stable-diffusion-v1-5":"Stable Diffusion 1.5",
-            "spaces/stabilityai/stable-diffusion-1":"Stable Diffusion 1.0",
+            "spaces/stabilityai/stable-diffusion":"SD 2.1",
+            "spaces/runwayml/stable-diffusion-v1-5":"SD 1.5",
+            "spaces/stabilityai/stable-diffusion-1":"SD 1.0",
             }
 
 tab_actions = []
