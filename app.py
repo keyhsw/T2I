@@ -62,7 +62,7 @@ if extend_prompt_3:
     MagicPrompt = gr.Interface.load("spaces/Gustavosta/MagicPrompt-Stable-Diffusion")
     thanks_info += "[<a style='display:inline-block' href='https://huggingface.co/spaces/Gustavosta/MagicPrompt-Stable-Diffusion' _blank><font style='color:blue;weight:bold;'>MagicPrompt(3)</font></a>]"
 
-do_dreamlike_photoreal = True
+do_dreamlike_photoreal = False
 if do_dreamlike_photoreal:
     def add_random_noise(prompt, noise_level=0.1):
         # Get the percentage of characters to add as noise
