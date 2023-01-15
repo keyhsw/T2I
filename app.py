@@ -231,11 +231,8 @@ switch_tab_advanced = """async() => {
     tabitems_title = window['gradioEl'].querySelectorAll('#tab_demo')[0].children[0].children[0].children;  
     for (var i = 0; i < tabitems.length; i++) {   
         if (tabitems_title[i].innerText.indexOf('SD') >= 0) {
-            for (var j = 0; j < tabitems[i].childNodes[0].children[1].children.length; j++) {
-                if (j != 1) {
-                    tabitems[i].childNodes[0].children[1].children[j].style.display=action;
-                }
-            }
+            tabitems[i].childNodes[0].children[1].children[0].style.display=action;
+            tabitems[i].childNodes[0].children[1].children[4].style.display=action;
         } else if (tabitems_title[i].innerText.indexOf('Taiyi') >= 0) {
             tabitems[i].children[0].children[0].children[1].style.display=action;
         }
