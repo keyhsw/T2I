@@ -83,7 +83,7 @@ if do_dreamlike_photoreal:
 
     tab_actions.append(dreamlike_image)
     tab_titles.append("Dreamlike_2.0")
-    thanks_info += "[<a style='display:inline-block' href='https://huggingface.co/models/dreamlike-art/dreamlike-photoreal-2.0' _blank><font style='color:blue;weight:bold;'>dreamlike-photoreal-2.0</font></a>]"
+    thanks_info += "[<a style='display:inline-block' href='https://huggingface.co/dreamlike-art/dreamlike-photoreal-2.0' _blank><font style='color:blue;weight:bold;'>dreamlike-photoreal-2.0</font></a>]"
 
 for space_id in space_ids.keys():
     print(space_id, space_ids[space_id])
@@ -125,6 +125,7 @@ start_work = """async() => {
             valueSetter.call(element, value);
       }
     }
+
     window['tab_advanced'] = 0;
     
     var gradioEl = document.querySelector('body > gradio-app').shadowRoot;
@@ -134,8 +135,10 @@ start_work = """async() => {
     
     if (typeof window['gradioEl'] === 'undefined') {
         window['gradioEl'] = gradioEl;
+
         tabitems = window['gradioEl'].querySelectorAll('.tabitem');
         tabitems_title = window['gradioEl'].querySelectorAll('#tab_demo')[0].children[0].children[0].children;
+
         for (var i = 0; i < tabitems.length; i++) {   
             if (tabitems_title[i].innerText.indexOf('SD') >= 0) {
                 tabitems[i].childNodes[0].children[0].style.display='none';
@@ -143,6 +146,13 @@ start_work = """async() => {
                     if (j != 1) {
                         tabitems[i].childNodes[0].children[1].children[j].style.display='none';
                     }
+                }
+                if (tabitems_title[i].innerText.indexOf('SD 1') >= 0) {
+                    for (var j = 0; j < 4; j++) {
+                        tabitems[i].childNodes[0].children[1].children[3].children[1].children[j].children[2].removeAttribute("disabled");
+                    }
+                } else if (tabitems_title[i].innerText.indexOf('SD 2') >= 0) {
+                    tabitems[i].children[0].children[1].children[3].children[0].click();
                 }
             } else if (tabitems_title[i].innerText.indexOf('Taiyi') >= 0) {
                 tabitems[i].children[0].children[0].children[1].style.display='none';
@@ -165,6 +175,7 @@ start_work = """async() => {
         }
         page1.style.display = "none";
         page2.style.display = "block";  
+
         prompt_work = window['gradioEl'].querySelectorAll('#prompt_work');
         for (var i = 0; i < prompt_work.length; i++) {
             prompt_work[i].style.display='none';
@@ -231,8 +242,13 @@ switch_tab_advanced = """async() => {
     tabitems_title = window['gradioEl'].querySelectorAll('#tab_demo')[0].children[0].children[0].children;  
     for (var i = 0; i < tabitems.length; i++) {   
         if (tabitems_title[i].innerText.indexOf('SD') >= 0) {
-            tabitems[i].childNodes[0].children[1].children[0].style.display=action;
-            tabitems[i].childNodes[0].children[1].children[4].style.display=action;
+            //tabitems[i].childNodes[0].children[1].children[0].style.display=action;
+            //tabitems[i].childNodes[0].children[1].children[4].style.display=action;
+            for (var j = 0; j < tabitems[i].childNodes[0].children[1].children.length; j++) {
+                if (j != 1) {
+                    tabitems[i].childNodes[0].children[1].children[j].style.display=action;
+                }
+            }            
         } else if (tabitems_title[i].innerText.indexOf('Taiyi') >= 0) {
             tabitems[i].children[0].children[0].children[1].style.display=action;
         }
