@@ -28,6 +28,7 @@ space_ids = {
             "spaces/stabilityai/stable-diffusion": "SD 2.1",
             "spaces/runwayml/stable-diffusion-v1-5": "SD 1.5",
             "spaces/stabilityai/stable-diffusion-1": "SD 1.0",
+            "dalle_mini_tab": "Dalle mini",
             "spaces/IDEA-CCNL/Taiyi-Stable-Diffusion-Chinese": "Taiyi(太乙)",
             }
 
@@ -88,10 +89,15 @@ if do_dreamlike_photoreal:
 for space_id in space_ids.keys():
     print(space_id, space_ids[space_id])
     try:
-        tab = gr.Interface.load(space_id)
-        tab_actions.append(tab)
-        tab_titles.append(space_ids[space_id])
-        thanks_info += f"[<a style='display:inline-block' href='https://huggingface.co/{space_id}' _blank><font style='color:blue;weight:bold;'>{space_ids[space_id]}</font></a>]"
+        tab_title = space_ids[space_id]
+        tab_titles.append(tab_title)
+        if (tab_title == 'Dalle mini'):
+            tab_content = gr.Blocks(elem_id='dalle_mini')
+            tab_actions.append(tab_content)            
+        else:
+            tab_content = gr.Interface.load(space_id)
+            tab_actions.append(tab_content)
+            thanks_info += f"[<a style='display:inline-block' href='https://huggingface.co/{space_id}' _blank><font style='color:blue;weight:bold;'>{tab_title}</font></a>]"
     except Exception as e:
         logger.info(f"load_fail__{space_id}_{e}")
 
@@ -125,7 +131,6 @@ start_work = """async() => {
             valueSetter.call(element, value);
       }
     }
-
     window['tab_advanced'] = 0;
     
     var gradioEl = document.querySelector('body > gradio-app').shadowRoot;
@@ -135,10 +140,10 @@ start_work = """async() => {
     
     if (typeof window['gradioEl'] === 'undefined') {
         window['gradioEl'] = gradioEl;
-
         tabitems = window['gradioEl'].querySelectorAll('.tabitem');
         tabitems_title = window['gradioEl'].querySelectorAll('#tab_demo')[0].children[0].children[0].children;
-
+        window['dalle_mini_block'] = null;
+        window['dalle_mini_iframe'] = null;
         for (var i = 0; i < tabitems.length; i++) {   
             if (tabitems_title[i].innerText.indexOf('SD') >= 0) {
                 tabitems[i].childNodes[0].children[0].style.display='none';
@@ -159,6 +164,8 @@ start_work = """async() => {
                 tabitems[i].children[0].children[0].children[0].children[0].children[1].style.display='none';
             } else if (tabitems_title[i].innerText.indexOf('Dreamlike') >= 0) {
                 tabitems[i].childNodes[0].children[0].children[1].style.display='none';
+            } else if (tabitems_title[i].innerText.indexOf('Dalle mini') >= 0) {
+                window['dalle_mini_block']=  tabitems[i];
             }
         }  
         
@@ -175,7 +182,6 @@ start_work = """async() => {
         }
         page1.style.display = "none";
         page2.style.display = "block";  
-
         prompt_work = window['gradioEl'].querySelectorAll('#prompt_work');
         for (var i = 0; i < prompt_work.length; i++) {
             prompt_work[i].style.display='none';
@@ -198,6 +204,20 @@ start_work = """async() => {
                             window['prevPrompt'] = text_value;
                             tabitems = window['gradioEl'].querySelectorAll('.tabitem');
                             for (var i = 0; i < tabitems.length; i++) {  
+                                if (tabitems_title[i].innerText.indexOf('Dalle mini') >= 0) {
+                                    if (window['dalle_mini_block']) {
+                                        if (window['dalle_mini_iframe'] === null) {
+                                            window['dalle_mini_iframe'] = document.createElement('iframe');                                                
+                                            window['dalle_mini_iframe'].height = 1000;
+                                            window['dalle_mini_iframe'].width = '100%';        
+                                            window['dalle_mini_iframe'].id = 'dalle_iframe';   
+                                            window['dalle_mini_block'].appendChild(window['dalle_mini_iframe']);
+                                        } 
+                                        window['dalle_mini_iframe'].src = 'https://yizhangliu-dalleclone.hf.space/index.html?prompt=' + encodeURI(text_value);
+                                        console.log('dalle_mini');
+                                    }    
+                                    continue;
+                                }
                                 inputText = null;
                                 if (tabitems_title[i].innerText.indexOf('SD') >= 0) {
                                     text_value = window['gradioEl'].querySelectorAll('#prompt_work')[0].querySelectorAll('textarea')[0].value;
@@ -209,7 +229,7 @@ start_work = """async() => {
                                 if (inputText) {
                                     setNativeValue(inputText, text_value);
                                     inputText.dispatchEvent(new Event('input', { bubbles: true }));
-                                }
+                                }                                
                             }
                            
                             setTimeout(function() {
@@ -366,5 +386,6 @@ with gr.Blocks(title='Text-to-Image') as demo:
             else:
                 draw_btn_0.click(fn=prompt_draw_2, inputs=[prompt_input0], outputs=[prompt_work, prompt_work_zh])
                 draw_btn_1.click(fn=prompt_draw_2, inputs=[prompt_input1], outputs=[prompt_work, prompt_work_zh])                
-        
+
+demo.queue()
 demo.launch()
