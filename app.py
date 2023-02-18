@@ -7,22 +7,26 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from loguru import logger
 
-language_translation_model = hub.Module(directory=f'./baidu_translate')
+from utils import get_tmt_client, getTextTrans_tmt
+tmt_client = get_tmt_client()
+
+# language_translation_model = hub.Module(directory=f'./baidu_translate')
 def getTextTrans(text, source='zh', target='en'):
-    def is_chinese(string):
-        for ch in string:
-            if u'\u4e00' <= ch <= u'\u9fff':
-                return True
-        return False
+    return getTextTrans_tmt(tmt_client, text, source, target)
+    # def is_chinese(string):
+    #     for ch in string:
+    #         if u'\u4e00' <= ch <= u'\u9fff':
+    #             return True
+    #     return False
         
-    if not is_chinese(text) and target == 'en': 
-        return text
+    # if not is_chinese(text) and target == 'en': 
+    #     return text
         
-    try:
-        text_translation = language_translation_model.translate(text, source, target)
-        return text_translation
-    except Exception as e:
-        return text 
+    # try:
+    #     text_translation = language_translation_model.translate(text, source, target)
+    #     return text_translation
+    # except Exception as e:
+    #     return text 
         
 space_ids = {
             "spaces/stabilityai/stable-diffusion": "SD 2.1",
