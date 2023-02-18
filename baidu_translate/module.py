@@ -1,5 +1,5 @@
 import argparse
-import random
+import random, os
 from hashlib import md5
 from typing import Optional
 
@@ -10,10 +10,8 @@ from paddlehub.module.module import moduleinfo
 from paddlehub.module.module import runnable
 from paddlehub.module.module import serving
 
-
 def make_md5(s, encoding='utf-8'):
     return md5(s.encode(encoding)).hexdigest()
-
 
 @moduleinfo(name="baidu_translate",
             version="1.0.0",
@@ -28,13 +26,15 @@ class BaiduTranslate:
       :param appid: appid for requesting Baidu translation service.
       :param appkey: appkey for requesting Baidu translation service.
       """
+        appid = os.environ.get('baidu_translate_appid')
+        appkey = os.environ.get('baidu_translate_appkey')
         # Set your own appid/appkey.
-        if appid == None:
-            self.appid = '20201015000580007'
+        if appid is None:
+            self.appid = '' 
         else:
             self.appid = appid
         if appkey is None:
-            self.appkey = 'IFJB6jBORFuMmVGDRud1'
+            self.appkey = '' 
         else:
             self.appkey = appkey
         self.url = 'http://api.fanyi.baidu.com/api/trans/vip/translate'
@@ -42,11 +42,9 @@ class BaiduTranslate:
     def translate(self, query: str, from_lang: Optional[str] = "en", to_lang: Optional[int] = "zh"):
         """
         Create image by text prompts using ErnieVilG model.
-
         :param query: Text to be translated.
         :param from_lang: Source language.
         :param to_lang: Dst language.
-
         Return translated string.
         """
         # Generate salt and sign
@@ -102,3 +100,4 @@ class BaiduTranslate:
         self.arg_input_group.add_argument('--to_lang', type=str, default='zh', help="目标语言")
         self.arg_input_group.add_argument('--appid', type=str, default=None, help="注册得到的个人appid")
         self.arg_input_group.add_argument('--appkey', type=str, default=None, help="注册得到的个人appkey")
+
