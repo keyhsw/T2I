@@ -6,3 +6,4 @@ gradio
 paddlepaddle==2.3.2
 paddlehub
 loguru
+tencentcloud-sdk-python
